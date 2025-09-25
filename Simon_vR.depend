@@ -926,7 +926,7 @@
 	"jugador.h"
 	"dibujos.h"
 
-1758801118 source:c:\users\lauti\onedrive\desktop\simon_vr\menu.c
+1758812294 source:c:\users\lauti\onedrive\desktop\simon_vr\menu.c
 	"menu.h"
 	<stdio.h>
 	<SDL2/SDL.h>

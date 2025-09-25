@@ -136,7 +136,10 @@ Configuracion mostrarMenuConfiguracion(SDL_Renderer* renderer)
     SDL_Rect flechaDerFreq  = {1100, 450, 7*TAM_PIXEL, 7*TAM_PIXEL};
     SDL_Rect flechaIzqFreq  = {900,  450, 7*TAM_PIXEL, 7*TAM_PIXEL};
     SDL_Rect btnGuardar = {400, 600, 200, 100};
-    SDL_Rect btnDesafio   = {700, 600, 200, 100};  // X,Y,ALTO , ANCHO DEL DIBUJO
+    SDL_Rect btnDesafio   = {700, 600, 200, 100}; // X,Y,ALTO , ANCHO DEL DIBUJO
+    // creo las sombras de los botoncitos
+    SDL_Rect sombraGuardar = {390, 590, 220, 120};
+    SDL_Rect sombraDesafio   = {690, 590, 220, 120};
 
     // cargo la fuente
     TTF_Init();
@@ -174,12 +177,12 @@ Configuracion mostrarMenuConfiguracion(SDL_Renderer* renderer)
                 // Frecuencia de Nota
                 if (SDL_PointInRect(&(SDL_Point){x,y}, &flechaDerFreq)) {
                     if(duracionIni<2000)
-                        duracionIni= duracionIni + 20;
+                        duracionIni= duracionIni + 100;
 
                 }
                 if (SDL_PointInRect(&(SDL_Point){x,y}, &flechaIzqFreq)) {
-                    if (duracionIni > 10)
-                        duracionIni= duracionIni - 20;
+                    if (duracionIni > 500)
+                        duracionIni= duracionIni - 100;
                 }
                 if (SDL_PointInRect(&(SDL_Point){x,y}, &btnGuardar)) {
                     // Acción de GUARDAR
@@ -229,15 +232,22 @@ Configuracion mostrarMenuConfiguracion(SDL_Renderer* renderer)
         mostrarTexto(renderer, durIn, font, 970, 450,(SDL_Color){255,255,255,255});
 
 ///// creacion de los dibujos de los botones////
-        SDL_SetRenderDrawColor(renderer, 135,246,255,255); // azulito {135, 246, 255}
+
+        SDL_SetRenderDrawColor(renderer, 11,127,143,255); //
+        SDL_RenderFillRect(renderer, &sombraGuardar);
+
+        SDL_SetRenderDrawColor(renderer, 17,50,0,255); //
+        SDL_RenderFillRect(renderer, &sombraDesafio);
+
+        SDL_SetRenderDrawColor(renderer, 17,168,189,255); // celeste {135, 246, 255}
 
         SDL_RenderFillRect(renderer, &btnGuardar);
-        mostrarTexto(renderer, "Guardar", font, btnGuardar.x +50, btnGuardar.y +20, (SDL_Color){255,255,255,255});
+        mostrarTexto(renderer, "Guardar", font, btnGuardar.x +35, btnGuardar.y +30, (SDL_Color){255,255,255,255});
 
-        SDL_SetRenderDrawColor(renderer, 0,128,0,255); // rojito
+        SDL_SetRenderDrawColor(renderer, 0,128,0,255); // verde
 
         SDL_RenderFillRect(renderer, &btnDesafio);
-        mostrarTexto(renderer, "Desafio", font, btnDesafio.x + 20, btnDesafio.y + 20, (SDL_Color){255,255,255,255});
+        mostrarTexto(renderer, "Desafio", font, btnDesafio.x + 30, btnDesafio.y + 30, (SDL_Color){255,255,255,255});
 
         // Mostrar
         SDL_RenderPresent(renderer);

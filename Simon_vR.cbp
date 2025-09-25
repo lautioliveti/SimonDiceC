@@ -56,6 +56,10 @@
 		<Unit filename="Main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="dibujos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="dibujos.h" />
 		<Unit filename="jugador.c">
 			<Option compilerVar="CC" />
 		</Unit>
