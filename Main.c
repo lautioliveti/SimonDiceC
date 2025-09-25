@@ -38,11 +38,13 @@ int main(int argc, char *argv[])
 
     // Solicitar nombre del jugador
     solicitarNombreJugador(renderer, &jugador);
-/*
+
     // Mostrar menú y obtener configuración
     Configuracion config = mostrarMenuConfiguracion(renderer);
 
-    // Loop principal del juego
+    printf("%d, %d",config.cantNotas,config.duracionIni);
+
+/*    // Loop principal del juego
     int corriendo = 1;
     while (corriendo) {
         corriendo = ejecutarJuego(renderer, &config, nombreJugador);
@@ -52,11 +54,9 @@ int main(int argc, char *argv[])
     mostrarEstadisticas(renderer, nombreJugador);
 
 */
-
 // Liberar recursos
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(ventana);
-    //TTF_Quit();
     SDL_Quit();
     return 0;
 }

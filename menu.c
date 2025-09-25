@@ -4,6 +4,9 @@
 #include <SDL2/SDL_ttf.h>
 #include "jugador.h"
 
+#define ALTO_VENTANA 768
+#define ANCHO_VENTANA 1366
+
 void mostrarPantallaPresentacion(SDL_Renderer * renderer)
 {
     TTF_Init();
@@ -13,30 +16,21 @@ void mostrarPantallaPresentacion(SDL_Renderer * renderer)
         printf("Error cargando fuente: %s\n", TTF_GetError());
         return;
     }
-    //color texto: blanco
-    SDL_Color color = {255, 255, 255};
-    // Crear superficie con el texto
-    SDL_Surface *surface = TTF_RenderText_Solid(font, "Bienvenido al juego!", color);
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-    SDL_Rect dst = {200, 200, surface->w, surface->h}; // 100 y 200 son las coordenadas de la pantalla, w y h del surface son el ancho y alto del texto
-
-    SDL_FreeSurface(surface); //libero el bit map que se creó en la ram, ya que se creó la textura que necesitaba
-
-    // Dibujar fondo y texto
+    // Fondo negro
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    SDL_RenderCopy(renderer, texture, NULL, &dst);
+    // Texto blanco centrado
+    SDL_Color color = {255, 255, 255, 255};
+    mostrarTexto(renderer, "Bienvenido a Anhedonia!", font, ANCHO_VENTANA/2 - 180, ALTO_VENTANA/2-30, color);   // el - del eje x y del eje y es para centrar el texto :)
+    mostrarTexto(renderer, "Simon dice!", font, ANCHO_VENTANA/2 - 90, ALTO_VENTANA/2 +50, color);
     SDL_RenderPresent(renderer);
 
-    // Esperar unos segundos
     SDL_Delay(3000);
-    SDL_RenderClear(renderer);
 
-    SDL_DestroyTexture(texture);
     TTF_CloseFont(font);
     TTF_Quit();
+
 
 }
 
@@ -51,9 +45,11 @@ void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador)
         printf("Error cargando fuente: %s\n", TTF_GetError());
         return;
     }
-    //color texto: celeste
-    SDL_Color color = {135, 246, 255};
-    SDL_Color color2 = {240, 255, 255};
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_Color color = {135, 246, 255}; // Celeste
+    SDL_Color color2 = {240, 255, 255}; // Tipo de blanco
 
     SDL_Event e;
     int corriendo = 1; //bandera del while
@@ -90,32 +86,19 @@ void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador)
         }
 
         // Mensaje de ayuda
-        SDL_Surface *ayudaSurface = TTF_RenderText_Solid(font, "-> Ingresá tu nombre y presioná Enter", color);
-        SDL_Texture *ayudaTexture = SDL_CreateTextureFromSurface(renderer, ayudaSurface);
-        SDL_Rect ayudaRect = {50, 10, ayudaSurface->w, ayudaSurface->h};
-        SDL_RenderCopy(renderer, ayudaTexture, NULL, &ayudaRect);
-        SDL_FreeSurface(ayudaSurface);
-        SDL_DestroyTexture(ayudaTexture);
+        mostrarTexto(renderer,"Ingresar nombre del jugador ENTER",font,ANCHO_VENTANA/2 - 300, ALTO_VENTANA/2-30,color);
 
         // Mostrar nombre ingresado
         if (strlen(nombreJugador) > 0) {
-            SDL_Surface *textoSurface = TTF_RenderText_Solid(font, nombreJugador, color2);
-            SDL_Texture *textoTexture = SDL_CreateTextureFromSurface(renderer, textoSurface);
-            SDL_Rect destino = {50, 50, textoSurface->w, textoSurface->h};
-            SDL_RenderCopy(renderer, textoTexture, NULL, &destino);
-            SDL_FreeSurface(textoSurface);
-            SDL_DestroyTexture(textoTexture);
+            mostrarTexto(renderer,nombreJugador,font, ANCHO_VENTANA/2 - 120, ALTO_VENTANA/2 +50 ,color2);
         }
-
-
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
 
     }
 
-    crearJugador(jugador,nombreJugador);
+    crearJugador(jugador,nombreJugador); // usando un TDA_JUGADOR
 
-    printf("%s",jugador->nombre);
 
     TTF_CloseFont(font);
     TTF_Quit();
@@ -123,3 +106,147 @@ void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador)
     //  desactiva entrada de texto
 }
 
+Configuracion mostrarMenuConfiguracion(SDL_Renderer* renderer)
+{
+    Configuracion config = {0,0}; // INICIALIZO ENCASO DE ERROR DE FUENTE
+
+    // Valores iniciales
+    int cantidadNotas = 3;
+    int duracionIni = 2000;
+
+    // Definir flechas (izq y der) igual que vos
+    const int flechaDer[7][7] = { {A,T,T,T,T,T,T},
+                                {A,A,T,T,T,T,T},
+                                {A,A,A,T,T,T,T},
+                                {A,A,A,A,T,T,T},
+                                {A,A,A,T,T,T,T},
+                                {A,A,T,T,T,T,T},
+                                {A,T,T,T,T,T,T} };
+    const int flechaIzq[7][7] = { {T,T,T,T,T,T,A},
+                                 {T,T,T,T,T,A,A},
+                                 {T,T,T,T,A,A,A},
+                                 {T,T,T,A,A,A,A},
+                                 {T,T,T,T,A,A,A},
+                                 {T,T,T,T,T,A,A},
+                                 {T,T,T,T,T,T,A} };
+
+    // Rectangulos para percibir el click donde creare las imagenes
+    SDL_Rect flechaDerNotas = {1100, 250, 7*TAM_PIXEL, 7*TAM_PIXEL};
+    SDL_Rect flechaIzqNotas = {900,  250, 7*TAM_PIXEL, 7*TAM_PIXEL};
+    SDL_Rect flechaDerFreq  = {1100, 450, 7*TAM_PIXEL, 7*TAM_PIXEL};
+    SDL_Rect flechaIzqFreq  = {900,  450, 7*TAM_PIXEL, 7*TAM_PIXEL};
+    SDL_Rect btnGuardar = {400, 600, 200, 100};
+    SDL_Rect btnDesafio   = {700, 600, 200, 100};  // X,Y,ALTO , ANCHO DEL DIBUJO
+
+    // cargo la fuente
+    TTF_Init();
+    TTF_Font * font = TTF_OpenFont("fnt/SUSEMono-Medium.ttf", 32);
+    if (!font) {
+        printf("Error cargando fuente: %s\n", TTF_GetError());
+        return config;
+    }
+    // loop de cfg.
+    SDL_Event e;
+    int corriendo = 1;
+
+    while (corriendo)
+    {
+        while (SDL_PollEvent(&e))
+        {
+            if(e.type==SDL_QUIT) {
+                corriendo = 0;
+                printf("Saliendo de SDL\n");
+            }
+            if(e.type == SDL_MOUSEBUTTONDOWN) {
+                int x = e.button.x;
+                int y = e.button.y;
+
+                // Cantidad de Notas
+                if (SDL_PointInRect(&(SDL_Point){x,y}, &flechaDerNotas)) {
+                    if (cantidadNotas < 8)   // tope máximo
+                        cantidadNotas++;
+                }
+                if (SDL_PointInRect(&(SDL_Point){x,y}, &flechaIzqNotas)) {
+                    if (cantidadNotas > 3)   // tope mínimo
+                        cantidadNotas--;
+                }
+
+                // Frecuencia de Nota
+                if (SDL_PointInRect(&(SDL_Point){x,y}, &flechaDerFreq)) {
+                    if(duracionIni<2000)
+                        duracionIni= duracionIni + 20;
+
+                }
+                if (SDL_PointInRect(&(SDL_Point){x,y}, &flechaIzqFreq)) {
+                    if (duracionIni > 10)
+                        duracionIni= duracionIni - 20;
+                }
+                if (SDL_PointInRect(&(SDL_Point){x,y}, &btnGuardar)) {
+                    // Acción de GUARDAR
+                    printf("Configuración guardada!\n");
+                    config.cantNotas = cantidadNotas;
+                    config.duracionIni = duracionIni;
+                    corriendo = 0; // salir después de guardar
+                }
+
+                if (SDL_PointInRect(&(SDL_Point){x,y}, &btnDesafio)) {
+                    // MODO DESAFIO
+                    printf("ENTRASTE AL MODO DESAFIOr\n");
+                    corriendo = 0;
+                }
+            }
+        }
+
+        // Limpiar pantalla
+        SDL_SetRenderDrawColor(renderer, 0,0,0,255);
+        SDL_RenderClear(renderer);
+
+        // Dibujar textos
+        mostrarTexto(renderer,"CONFIGURACIÓN",font,550,50,(SDL_Color){135, 246, 255,255});
+
+        //  Cantidad de Notas
+        dibujar(renderer,flechaDer,1100,250,7);
+        dibujar(renderer,flechaIzq,900,250,7);
+        mostrarTexto(renderer,"Cantidad de Notas",font,250,250,(SDL_Color){255,255,255,255});
+
+        char Notas[10];
+        sprintf(Notas, "%d", cantidadNotas); // paso el entero a un string
+        mostrarTexto(renderer, Notas, font, 1000, 250,(SDL_Color){255,255,255,255});
+
+        //  Frecuencia
+
+        dibujar(renderer,flechaDer,1100,450,7);
+        dibujar(renderer,flechaIzq,900,450,7);
+        mostrarTexto(renderer,"Duración inicial",font,250,450,(SDL_Color){255,255,255,255});
+
+
+        char durIn[10];          // cad para armar el texto
+        char num[5];              // cad para el número
+        sprintf(num, "%d", duracionIni);  // convierto el número a string
+        strcpy(durIn, num);             // copio el número a bufFreq
+        strcat(durIn, "ms");   // concateno
+
+        mostrarTexto(renderer, durIn, font, 970, 450,(SDL_Color){255,255,255,255});
+
+///// creacion de los dibujos de los botones////
+        SDL_SetRenderDrawColor(renderer, 135,246,255,255); // azulito {135, 246, 255}
+
+        SDL_RenderFillRect(renderer, &btnGuardar);
+        mostrarTexto(renderer, "Guardar", font, btnGuardar.x +50, btnGuardar.y +20, (SDL_Color){255,255,255,255});
+
+        SDL_SetRenderDrawColor(renderer, 0,128,0,255); // rojito
+
+        SDL_RenderFillRect(renderer, &btnDesafio);
+        mostrarTexto(renderer, "Desafio", font, btnDesafio.x + 20, btnDesafio.y + 20, (SDL_Color){255,255,255,255});
+
+        // Mostrar
+        SDL_RenderPresent(renderer);
+    }
+
+    // AHORA GUARDO LA CFG:)
+
+    TTF_CloseFont(font);
+    TTF_Quit();
+
+    return config;
+}

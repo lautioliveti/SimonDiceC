@@ -3,9 +3,19 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#define TAM_NOMBRE 30
 #include "jugador.h"
+#include "dibujos.h"
 
+#define TAM_NOMBRE 30
+
+
+
+typedef struct {
+    int cantNotas;  // 1 = fácil, 2 = medio, 3 = difícil
+    int duracionIni;
+} Configuracion;
+
+Configuracion mostrarMenuConfiguracion(SDL_Renderer* renderer);
 void mostrarPantallaPresentacion(SDL_Renderer * renderer);
 void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador);
 
