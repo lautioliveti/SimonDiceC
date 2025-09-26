@@ -38,6 +38,7 @@ void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador)
 {
     char nombreJugador[30];
 
+
     SDL_StartTextInput(); //  habilita entrada de texto
     TTF_Init();
     TTF_Font * font = TTF_OpenFont ("fnt/SUSEMono-Medium.ttf",32);
@@ -92,6 +93,7 @@ void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador)
         if (strlen(nombreJugador) > 0) {
             mostrarTexto(renderer,nombreJugador,font, ANCHO_VENTANA/2 - 120, ALTO_VENTANA/2 +50 ,color2);
         }
+
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
 
@@ -106,9 +108,123 @@ void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador)
     //  desactiva entrada de texto
 }
 
-Configuracion mostrarMenuConfiguracion(SDL_Renderer* renderer)
+int mostrarMenuInicial(SDL_Renderer *renderer)
 {
-    Configuracion config = {0,0}; // INICIALIZO ENCASO DE ERROR DE FUENTE
+
+    int modo;
+
+    TTF_Init();
+    // Cargar fuente
+    TTF_Font * font = TTF_OpenFont ("fnt/SUSEMono-Medium.ttf",32);
+    if (!font) {
+        printf("Error cargando fuente: %s\n", TTF_GetError());
+        return -1;
+    }
+
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    SDL_Rect btnSchornberg = {ANCHO_VENTANA/2-150, ALTO_VENTANA/2-200, 300, 50};
+    SDL_Rect btnDesafio   = {ANCHO_VENTANA/2-150, ALTO_VENTANA/2-50, 300, 50};
+    SDL_Rect btnMozart   = {ANCHO_VENTANA/2-150, ALTO_VENTANA/2+100, 300, 50};
+    SDL_Rect btnEstadisticas = {ANCHO_VENTANA/2-150 , ALTO_VENTANA/2+250, 300, 50};
+    // sombra de botnes
+    // creo las sombras de los botoncitos
+    SDL_Rect sombraSchornberg = {ANCHO_VENTANA/2-160, ALTO_VENTANA/2-210, 320, 70};
+    SDL_Rect sombraDesafio   = {ANCHO_VENTANA/2-160, ALTO_VENTANA/2-60, 320, 70};
+    SDL_Rect sombraMozart   = {ANCHO_VENTANA/2-160, ALTO_VENTANA/2+90, 320, 70};
+    SDL_Rect sombraEstadisticas ={ANCHO_VENTANA/2-160, ALTO_VENTANA/2+240, 320, 70};
+
+    SDL_Event e;
+    int corriendo = 1;
+
+    while(corriendo)
+        {
+            while(SDL_PollEvent(&e))
+            {
+                if(e.type==SDL_QUIT)
+                {
+                    corriendo = 0;
+                    printf("Saliendo de SDL\n");
+                }
+                if(e.type==SDL_MOUSEBUTTONDOWN)
+                {
+                    int x = e.button.x;
+                    int y = e.button.y;
+                    if (SDL_PointInRect(&(SDL_Point){x,y}, &btnSchornberg))
+                    {
+                        // MODO SCHRONBERG
+                        printf("MODO SCHORNBERG!\n");
+                        modo=SCHORNBERG;
+                        corriendo = 0; // salir después de guardar
+                    }
+
+                    if (SDL_PointInRect(&(SDL_Point){x,y}, &btnDesafio))
+                    {
+                        // MODO DESAFIO
+                        printf("ENTRASTE AL MODO DESAFIOr\n");
+                        modo=DESAFIO;
+                        corriendo = 0;
+                    }
+                    if (SDL_PointInRect(&(SDL_Point){x,y}, &btnMozart))
+                    {
+                        // MODO DESAFIO
+                        printf("ENTRASTE AL MODO DESAFIOr\n");
+                        modo=MOZART;
+                        corriendo = 0;
+                    }
+                    if (SDL_PointInRect(&(SDL_Point){x,y}, &btnEstadisticas))
+                    {
+                        // MODO DESAFIO
+                        printf("ENTRASTE AL MODO DESAFIOr\n");
+                        modo=ESTADISTICAS;
+                        corriendo = 0;
+                    }
+                }
+            }
+        mostrarTexto(renderer,"MENU PRINCIPAL",font,550,50,(SDL_Color){135, 246, 255,255});
+        // sombra
+        SDL_SetRenderDrawColor(renderer, 11,127,143,255); // celeste oscuro
+        SDL_RenderFillRect(renderer, &sombraSchornberg);
+        SDL_SetRenderDrawColor(renderer, 11,127,143,255); // celeste oscuro
+        SDL_RenderFillRect(renderer, &sombraDesafio);
+        SDL_SetRenderDrawColor(renderer, 11,127,143,255); // celeste oscuro
+        SDL_RenderFillRect(renderer, &sombraMozart);
+        SDL_SetRenderDrawColor(renderer, 11,127,143,255); // celeste oscuro
+        SDL_RenderFillRect(renderer, &sombraEstadisticas);
+        // botones click
+        SDL_SetRenderDrawColor(renderer, 17,168,189,255); // celeste {135, 246, 255}
+        SDL_RenderFillRect(renderer, &btnSchornberg);
+        mostrarTexto(renderer, "Schornberg", font, btnSchornberg.x +45, btnSchornberg.y +5, (SDL_Color){255,255,255,255});
+
+        SDL_SetRenderDrawColor(renderer, 17,168,189,255); // celeste {135, 246, 255}
+        SDL_RenderFillRect(renderer, &btnDesafio);
+        mostrarTexto(renderer, "Desafio", font, btnDesafio.x +75, btnDesafio.y +5, (SDL_Color){255,255,255,255});
+
+
+        SDL_SetRenderDrawColor(renderer, 17,168,189,255); // celeste {135, 246, 255}
+        SDL_RenderFillRect(renderer, &btnMozart);
+        mostrarTexto(renderer, "Mozart", font, btnMozart.x +75, btnMozart.y +5, (SDL_Color){255,255,255,255});
+
+        SDL_SetRenderDrawColor(renderer, 17,168,189,255); // celeste {135, 246, 255}
+        SDL_RenderFillRect(renderer, &btnEstadisticas);
+        mostrarTexto(renderer, "Estadisticas", font, btnEstadisticas.x +35, btnEstadisticas.y +5, (SDL_Color){255,255,255,255});
+
+         // Mostrar
+        SDL_RenderPresent(renderer);
+
+        }
+
+    TTF_CloseFont(font);
+    TTF_Quit();
+    return modo;
+
+
+}
+ConfiguracionSch mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer)
+{
+    ConfiguracionSch config = {0,0}; // INICIALIZO ENCASO DE ERROR DE FUENTE
 
     // Valores iniciales
     int cantidadNotas = 3;
@@ -233,10 +349,10 @@ Configuracion mostrarMenuConfiguracion(SDL_Renderer* renderer)
 
 ///// creacion de los dibujos de los botones////
 
-        SDL_SetRenderDrawColor(renderer, 11,127,143,255); //
+        SDL_SetRenderDrawColor(renderer, 11,127,143,255); // celeste oscuro
         SDL_RenderFillRect(renderer, &sombraGuardar);
 
-        SDL_SetRenderDrawColor(renderer, 17,50,0,255); //
+        SDL_SetRenderDrawColor(renderer, 17,50,0,255); // verde oscuro
         SDL_RenderFillRect(renderer, &sombraDesafio);
 
         SDL_SetRenderDrawColor(renderer, 17,168,189,255); // celeste {135, 246, 255}

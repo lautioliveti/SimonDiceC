@@ -10,6 +10,9 @@
 #define ANCHO_VENTANA 1366
 #define ERROR_VENTANA 1
 
+
+
+
 int main(int argc, char *argv[])
 {
     ////creo la ventana donde se interactúa con el juego
@@ -39,10 +42,20 @@ int main(int argc, char *argv[])
     // Solicitar nombre del jugador
     solicitarNombreJugador(renderer, &jugador);
 
-    // Mostrar menú y obtener configuración
-    Configuracion config = mostrarMenuConfiguracion(renderer);
+    // Mostrar menú y
+    int modo=mostrarMenuInicial(renderer);
 
-    printf("%d, %d",config.cantNotas,config.duracionIni);
+    //obtener configuración
+    switch(modo){
+        case SCHORNBERG:
+        {
+            ConfiguracionSch config = mostrarMenuConfiguracionSchornberg(renderer);
+            printf("%d, %d",config.cantNotas,config.duracionIni);
+            break;
+        }
+        default:
+            break;
+    }
 
 /*    // Loop principal del juego
     int corriendo = 1;

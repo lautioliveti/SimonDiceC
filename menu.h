@@ -6,6 +6,11 @@
 #include "jugador.h"
 #include "dibujos.h"
 
+
+#define SCHORNBERG 0
+#define DESAFIO 1
+#define MOZART 2
+#define ESTADISTICAS 3
 #define TAM_NOMBRE 30
 
 
@@ -13,9 +18,10 @@
 typedef struct {
     int cantNotas;  // 1 = fácil, 2 = medio, 3 = difícil
     int duracionIni;
-} Configuracion;
+} ConfiguracionSch;
 
-Configuracion mostrarMenuConfiguracion(SDL_Renderer* renderer);
+ConfiguracionSch mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer);
+int mostrarMenuInicial(SDL_Renderer* renderer);
 void mostrarPantallaPresentacion(SDL_Renderer * renderer);
 void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador);
 
