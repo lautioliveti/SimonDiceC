@@ -16,8 +16,8 @@
 int main(int argc, char *argv[])
 {
     ////creo la ventana donde se interactúa con el juego
-    Jugador jugador;
-    char nombreVentana[100];
+
+    char nombreVentana[20];
     sprintf(nombreVentana, "Simon");
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     /*
@@ -36,18 +36,63 @@ int main(int argc, char *argv[])
     SDL_Renderer *renderer = SDL_CreateRenderer(ventana, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND); //justifica usarlo?
 
-    // Pantalla de presentación
+    Jugador jugador;
+    int corriendo = 1;
+
     mostrarPantallaPresentacion(renderer);
+    solicitarNombreJugador(renderer,&jugador);
+
+    int estadoActual=MENU;
+    while(corriendo)
+        {
+            switch(estadoActual)
+            {
+                case MENU:
+                    {
+                        estadoActual= mostrarMenuInicial(renderer);
+                        break;
+                    }
+                case SCHORNBERG:
+                    {
+                        ConfiguracionSch configSc;
+                        estadoActual=mostrarMenuConfiguracionSchornberg(renderer,&configSc);
+                        if(estadoActual==SCHORNBERG)
+                            //DEBERIAMOS JUGAR AQUI.
+                            printf("JUGANDO\n");
+                        estadoActual=MENU;
+                    }
+                case DESAFIO:
+                    {
+                        // lo mismo que schornberg
+                        break;
+                    }
+                case MOZART:
+                    {
+                        // lo mismo que schornberg
+                        break;
+                    }
+                case ESTADISTICAS:
+                    {
+                        // lo mismo que
+                        break;
+                    }
+
+
+            }
+        }
+
+    // Pantalla de presentación
+//mostrarPantallaPresentacion(renderer);
 
     // Solicitar nombre del jugador
-    solicitarNombreJugador(renderer, &jugador);
+    //solicitarNombreJugador(renderer, &jugador);
 
     // Mostrar menú y
-    int modo=mostrarMenuInicial(renderer);
+   // int modo=mostrarMenuInicial(renderer);
 
     //obtener configuración
-    switch(modo){
-        case SCHORNBERG:
+   /* switch(modo){
+      case SCHORNBERG:
         {
             ConfiguracionSch config = mostrarMenuConfiguracionSchornberg(renderer);
             printf("%d, %d",config.cantNotas,config.duracionIni);
@@ -57,7 +102,7 @@ int main(int argc, char *argv[])
             break;
     }
 
-/*    // Loop principal del juego
+   // Loop principal del juego
     int corriendo = 1;
     while (corriendo) {
         corriendo = ejecutarJuego(renderer, &config, nombreJugador);

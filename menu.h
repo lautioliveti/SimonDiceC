@@ -7,10 +7,13 @@
 #include "dibujos.h"
 
 
-#define SCHORNBERG 0
-#define DESAFIO 1
-#define MOZART 2
-#define ESTADISTICAS 3
+#define SALIR 0
+#define MENU 1
+#define SCHORNBERG 2
+#define DESAFIO 3
+#define MOZART 4
+#define ESTADISTICAS 5
+
 #define TAM_NOMBRE 30
 
 
@@ -20,7 +23,7 @@ typedef struct {
     int duracionIni;
 } ConfiguracionSch;
 
-ConfiguracionSch mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer);
+int mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer,ConfiguracionSch *config);
 int mostrarMenuInicial(SDL_Renderer* renderer);
 void mostrarPantallaPresentacion(SDL_Renderer * renderer);
 void solicitarNombreJugador(SDL_Renderer * renderer, Jugador* jugador);

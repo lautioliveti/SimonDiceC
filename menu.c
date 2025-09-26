@@ -222,9 +222,11 @@ int mostrarMenuInicial(SDL_Renderer *renderer)
 
 
 }
-ConfiguracionSch mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer)
+int mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer,ConfiguracionSch *config)
 {
-    ConfiguracionSch config = {0,0}; // INICIALIZO ENCASO DE ERROR DE FUENTE
+    //ConfiguracionSch config = {0,0}; // INICIALIZO ENCASO DE ERROR DE FUENTE
+    config->cantNotas=0;
+    config->duracionIni=0;
 
     // Valores iniciales
     int cantidadNotas = 3;
@@ -251,22 +253,23 @@ ConfiguracionSch mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer)
     SDL_Rect flechaIzqNotas = {900,  250, 7*TAM_PIXEL, 7*TAM_PIXEL};
     SDL_Rect flechaDerFreq  = {1100, 450, 7*TAM_PIXEL, 7*TAM_PIXEL};
     SDL_Rect flechaIzqFreq  = {900,  450, 7*TAM_PIXEL, 7*TAM_PIXEL};
-    SDL_Rect btnGuardar = {400, 600, 200, 100};
-    SDL_Rect btnDesafio   = {700, 600, 200, 100}; // X,Y,ALTO , ANCHO DEL DIBUJO
+    SDL_Rect btnGuardar = {700, 600, 200, 100};
+    SDL_Rect btnVolver   = {400, 600, 200, 100}; // X,Y,ALTO , ANCHO DEL DIBUJO
     // creo las sombras de los botoncitos
-    SDL_Rect sombraGuardar = {390, 590, 220, 120};
-    SDL_Rect sombraDesafio   = {690, 590, 220, 120};
+    SDL_Rect sombraGuardar = {690, 590, 220, 120};
+    SDL_Rect sombraVolver   = {390, 590, 220, 120};
 
     // cargo la fuente
     TTF_Init();
     TTF_Font * font = TTF_OpenFont("fnt/SUSEMono-Medium.ttf", 32);
     if (!font) {
         printf("Error cargando fuente: %s\n", TTF_GetError());
-        return config;
+        return -1;
     }
     // loop de cfg.
     SDL_Event e;
     int corriendo = 1;
+    int estadosiguiente;
 
     while (corriendo)
     {
@@ -303,14 +306,16 @@ ConfiguracionSch mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer)
                 if (SDL_PointInRect(&(SDL_Point){x,y}, &btnGuardar)) {
                     // Acción de GUARDAR
                     printf("Configuración guardada!\n");
-                    config.cantNotas = cantidadNotas;
-                    config.duracionIni = duracionIni;
+                    config->cantNotas = cantidadNotas;
+                    config->duracionIni = duracionIni;
+                    estadosiguiente=SCHORNBERG;
                     corriendo = 0; // salir después de guardar
                 }
 
-                if (SDL_PointInRect(&(SDL_Point){x,y}, &btnDesafio)) {
+                if (SDL_PointInRect(&(SDL_Point){x,y}, &btnVolver)) {
                     // MODO DESAFIO
-                    printf("ENTRASTE AL MODO DESAFIOr\n");
+                    printf("VOLVER AL MENU\n");
+                    estadosiguiente=MENU;
                     corriendo = 0;
                 }
             }
@@ -352,27 +357,26 @@ ConfiguracionSch mostrarMenuConfiguracionSchornberg(SDL_Renderer* renderer)
         SDL_SetRenderDrawColor(renderer, 11,127,143,255); // celeste oscuro
         SDL_RenderFillRect(renderer, &sombraGuardar);
 
-        SDL_SetRenderDrawColor(renderer, 17,50,0,255); // verde oscuro
-        SDL_RenderFillRect(renderer, &sombraDesafio);
+        SDL_SetRenderDrawColor(renderer, 140,0,0,255); // rojo oscuro
+        SDL_RenderFillRect(renderer, &sombraVolver);
 
         SDL_SetRenderDrawColor(renderer, 17,168,189,255); // celeste {135, 246, 255}
 
         SDL_RenderFillRect(renderer, &btnGuardar);
         mostrarTexto(renderer, "Guardar", font, btnGuardar.x +35, btnGuardar.y +30, (SDL_Color){255,255,255,255});
 
-        SDL_SetRenderDrawColor(renderer, 0,128,0,255); // verde
+        SDL_SetRenderDrawColor(renderer, 224,0,0,255); // rojo
 
-        SDL_RenderFillRect(renderer, &btnDesafio);
-        mostrarTexto(renderer, "Desafio", font, btnDesafio.x + 30, btnDesafio.y + 30, (SDL_Color){255,255,255,255});
+        SDL_RenderFillRect(renderer, &btnVolver);
+        mostrarTexto(renderer, "Volver", font, btnVolver.x + 30, btnVolver.y + 30, (SDL_Color){255,255,255,255});
 
         // Mostrar
         SDL_RenderPresent(renderer);
     }
 
-    // AHORA GUARDO LA CFG:)
 
     TTF_CloseFont(font);
     TTF_Quit();
 
-    return config;
+    return estadosiguiente;
 }
