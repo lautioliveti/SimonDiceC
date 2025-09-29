@@ -930,31 +930,31 @@ void inicializar8Notas(NotasApp *app)
     app->azul2= azul2;
 
     //EL OFFSET ES UN PORCENTAJE DE PANTALLA 0-100, EMPEZANDO DESDE LA EZQUINA IZQ-ARRIBA
-    app->rojo1.offsetX =  15;
-    app->rojo1.offsetY = 5;
+    app->rojo1.offsetX =  5;
+    app->rojo1.offsetY = 15;
 
-    app->verde1.offsetX = 45;
-    app->verde1.offsetY = 5;
+    app->verde1.offsetX = 35;
+    app->verde1.offsetY = 15;
 
-    app->azul1.offsetX = 15;
-    app->azul1.offsetY = 70;
+    app->azul1.offsetX = 5;
+    app->azul1.offsetY = 85;
 
-    app->amarillo1.offsetX = 45;
-    app->amarillo1.offsetY = 70;
+    app->amarillo1.offsetX = 35;
+    app->amarillo1.offsetY = 85;
 
     /////linea 2
 
     app->verde2.offsetX = 95;
-    app->verde2.offsetY = 5;
+    app->verde2.offsetY = 15;
 
     app->rojo2.offsetX =  65;
-    app->rojo2.offsetY = 5;
+    app->rojo2.offsetY = 15;
 
     app->amarillo2.offsetX = 95;
-    app->amarillo2.offsetY = 70;
+    app->amarillo2.offsetY = 85;
 
     app->azul2.offsetX = 65;
-    app->azul2.offsetY = 70;
+    app->azul2.offsetY = 85;
     //sonidos
     app->rojo1.nota = app->escalaActual[0];
     app->verde1.nota = app->escalaActual[1];
@@ -971,7 +971,7 @@ void inicializar8Notas(NotasApp *app)
 
 void Innit_Schornberg(Jugador *jugador, ConfiguracionSch *configSc, SDL_Window *ventana, SDL_Renderer *renderer)
 {
-    //configSc->duracionIni = 800; // OCTAVIO - BORRAR
+   // configSc->duracionIni = 800; // OCTAVIO - BORRAR
     inicializarAudio();
     NotasApp app;
     Secuencia historial;

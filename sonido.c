@@ -36,7 +36,7 @@ void crearTono(float frecuenciaNota, int tiempoMS) {
     Mix_Chunk* tono;
     int canalUsado = 0;
 
-    int tiempo = tiempoMS * 2; // tiempo en milisegundos (MS)
+    int tiempo = tiempoMS* 2; // tiempo en milisegundos (MS)  LAUTARO
     int cantidadMuestras = (tiempo * FREQ_MUESTREO)/1000; //cuantas fotos totales vamos a tomar, se parte por mil para que sea todo en MS
     int tamBuffer = cantidadMuestras * sizeof(short); // en bytes
     short *buffer = malloc(tamBuffer);
