@@ -1,10 +1,7 @@
 #ifndef MENU_H_INCLUDED
 #define MENU_H_INCLUDED
-#include <stdio.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include "jugador.h"
-#include "dibujos.h"
+#define ALTO_VENTANA 768
+#define ANCHO_VENTANA 1366
 
 
 #define SALIR 0
@@ -13,8 +10,16 @@
 #define DESAFIO 3
 #define MOZART 4
 #define ESTADISTICAS 5
-
 #define TAM_NOMBRE 30
+
+
+
+#include <stdio.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include "jugador.h"
+#include "dibujos.h"
+
 
 
 

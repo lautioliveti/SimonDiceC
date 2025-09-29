@@ -4,13 +4,11 @@
 #include <SDL2/SDL_ttf.h>
 #include "menu.h"
 #include "jugador.h"
-
+#include "Schornberg.h"
 
 #define ALTO_VENTANA 768
 #define ANCHO_VENTANA 1366
 #define ERROR_VENTANA 1
-
-
 
 
 int main(int argc, char *argv[])
@@ -56,10 +54,11 @@ int main(int argc, char *argv[])
                     {
                         ConfiguracionSch configSc;
                         estadoActual=mostrarMenuConfiguracionSchornberg(renderer,&configSc);
-                        if(estadoActual==SCHORNBERG)
-                            //DEBERIAMOS JUGAR AQUI.
-                            printf("JUGANDO\n");
+                        printf("%s, %d, %d",jugador.nombre,configSc.cantNotas,configSc.duracionIni);
+                        if(estadoActual==SCHORNBERG) Innit_Schornberg(&jugador, &configSc, ventana, renderer);
+
                         estadoActual=MENU;
+                        break;
                     }
                 case DESAFIO:
                     {

@@ -4,9 +4,6 @@
 #include <SDL2/SDL_ttf.h>
 #include "jugador.h"
 
-#define ALTO_VENTANA 768
-#define ANCHO_VENTANA 1366
-
 void mostrarPantallaPresentacion(SDL_Renderer * renderer)
 {
     TTF_Init();
@@ -26,7 +23,7 @@ void mostrarPantallaPresentacion(SDL_Renderer * renderer)
     mostrarTexto(renderer, "Simon dice!", font, ANCHO_VENTANA/2 - 90, ALTO_VENTANA/2 +50, color);
     SDL_RenderPresent(renderer);
 
-    SDL_Delay(3000);
+    SDL_Delay(2000);
 
     TTF_CloseFont(font);
     TTF_Quit();
