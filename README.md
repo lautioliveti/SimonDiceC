@@ -1,0 +1,2 @@
+-Entrar a la carpeta DOC para ver como linkear las bibliotecas con C.
+-Codeblocks version 25.03
